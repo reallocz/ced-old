@@ -5,18 +5,10 @@
 #include "mytypes.h"
 #include "core/strbuf.h"
 
-typedef struct window {
-	uint flags;
-	GLFWwindow* gwin;
-	uint width;
-	uint height;
-	strbuf title;
-	int shouldclose;
-} window;
-
+typedef struct window_t window;
 
 /** window constructor */
-window win_create(uint width, uint height);
+window* win_create(uint width, uint height);
 
 /** window destructor */
 void win_destroy(window* win);

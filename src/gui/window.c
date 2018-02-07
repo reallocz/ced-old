@@ -7,6 +7,16 @@
 #define GLV_MINOR 3
 #define WINDEF_TITLE "[NEW DOCUMENT]"
 
+
+struct window_t {
+	uint flags;
+	GLFWwindow* gwin;
+	uint width;
+	uint height;
+	strbuf title;
+	int shouldclose;
+};
+
 static void _win_glfw_onerror(int error, const char* desc)
 {
 	printf("E: %s: code=%d: %s.\n", __func__, error, desc);
@@ -46,19 +56,18 @@ static GLFWwindow* _win_create_glfwwindow(uint width, uint height)
 	return window;
 }
 
-window win_create(uint width, uint height)
+window* win_create(uint width, uint height)
 {
 	_win_initglfw();
-	window win = {
-		.flags = 0,
-		.gwin = NULL,
-		.width = width,
-		.height = height,
-		.shouldclose = 0,
-	};
+	window* win = malloc(sizeof(window));
+	win->flags = 0;
+	win->gwin = NULL;
+	win->width = width;
+	win->height = height;
+	win->shouldclose = 0;
 
-	win.gwin = _win_create_glfwwindow(win.width, win.height);
-	flag_set(&win.flags, f_init);
+	win->gwin = _win_create_glfwwindow(win->width, win->height);
+	flag_set(&win->flags, f_init);
 	return win;
 }
 
