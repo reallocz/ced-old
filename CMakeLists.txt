@@ -14,6 +14,9 @@ include_directories(
 	${LIBDIR}/include
 )
 
+# Compiler flags
+add_compile_options(-Wall -Wextra -Wpedantic)
+
 # Subdirs
 add_subdirectory(${SRCDIR}/core)
 add_subdirectory(${SRCDIR}/gui)
