@@ -2,3 +2,4 @@ tags
 *.swp
 cscope.out
 build/
+.ycm_*
