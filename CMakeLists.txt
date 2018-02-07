@@ -15,7 +15,7 @@ include_directories(
 )
 
 # Compiler flags
-add_compile_options(-Wall -Wextra -Wpedantic)
+#add_compile_options(-Wall -Wextra -Wpedantic)
 
 # Subdirs
 add_subdirectory(${SRCDIR}/core)
@@ -37,9 +37,12 @@ target_link_libraries(debug
 	rt
 	Xxf86vm
 	Xcursor
-	${CMAKE_SOURCE_DIR}/${LIBDIR}/libglfw3.a
 	# / Glfw deps
 
 	gui
 	core
+
+	# placing this before gui and core causes ld error. Right now
+	# this config works. Keep this at the bottom of the list.
+	${CMAKE_SOURCE_DIR}/${LIBDIR}/libglfw3.a
 ) 

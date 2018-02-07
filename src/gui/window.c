@@ -54,6 +54,7 @@ window win_create(uint width, uint height)
 		.gwin = NULL,
 		.width = width,
 		.height = height,
+		.shouldclose = 0,
 	};
 
 	win.gwin = _win_create_glfwwindow(win.width, win.height);
@@ -73,6 +74,8 @@ void win_destroy(window* win)
 	flag_unset(&win->flags, f_init);
 	flag_set(&win->flags, f_dead);
 	win = NULL;
+	glfwTerminate();
+	printf("%s: window destoryed.\n", __func__);
 }
 
 void win_settitle(window* win, const char* title)
@@ -80,5 +83,33 @@ void win_settitle(window* win, const char* title)
 	glfwSetWindowTitle(win->gwin, title);
 }
 
+void win_update(window* win)
+{
+	if(win->shouldclose == 1) {
+		printf("%s: window close flag set.\n", __func__);
+		glfwSetWindowShouldClose(win->gwin, GLFW_TRUE);
+	}
+	glfwSwapBuffers(win->gwin);
+}
 
+void win_clear(window* win)
+{
+	glClearColor(255, 255, 255, 255);
+	glClear(GL_COLOR_BUFFER_BIT);
+}
+
+void win_pollevents(window* win)
+{
+	glfwPollEvents();
+}
+
+void win_setclose(window* win, int val)
+{
+	win->shouldclose = 1;
+}
+
+int win_shouldclose(const window* win)
+{
+	return win->shouldclose || glfwWindowShouldClose(win->gwin);
+}
 

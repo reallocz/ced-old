@@ -11,11 +11,20 @@ typedef struct window {
 	uint width;
 	uint height;
 	strbuf title;
+	int shouldclose;
 } window;
 
 
-// Create a new window
+/** window constructor */
 window win_create(uint width, uint height);
+
+/** window destructor */
 void win_destroy(window* win);
+
 void win_settitle(window* win, const char* title);
+void win_update(window* win);
+void win_clear(window* win);
+void win_pollevents(window* win);
+void win_setclose(window* win, int val);
+int win_shouldclose(const window* win);
 

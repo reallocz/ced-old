@@ -9,19 +9,18 @@ int main(void)
 	sb_pprint(&a);
 	window win = win_create(640, 480);
 
-	/* Loop until the user closes the window */
-	while (!glfwWindowShouldClose(win.gwin))
+	/* Main loop */
+	while (!win_shouldclose(&win))
 	{
-		/* Render here */
-		glClear(GL_COLOR_BUFFER_BIT);
-
-		/* Swap front and back buffers */
-		glfwSwapBuffers(win.gwin);
-
-		/* Poll for and process events */
-		glfwPollEvents();
+		/** 
+		 * Rendering
+		 * window: clear->update->pollevents cycle
+		 */
+		win_clear(&win);
+		win_update(&win);
+		win_pollevents(&win);
 	}
 
-	glfwTerminate();
+	win_destroy(&win);
 	return 0;
 }
