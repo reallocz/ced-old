@@ -11,8 +11,8 @@
 struct window_t {
 	uint flags;
 	GLFWwindow* gwin;
-	uint width;
-	uint height;
+	int width;
+	int height;
 	strbuf title;
 	int shouldclose;
 };
@@ -94,12 +94,26 @@ void win_settitle(window* win, const char* title)
 
 void win_update(window* win)
 {
+	GLFWwindow* gwin = win->gwin;
+
+	// Check for close flags
 	if(win->shouldclose == 1) {
 		printf("%s: window close flag set.\n", __func__);
-		glfwSetWindowShouldClose(win->gwin, GLFW_TRUE);
+		glfwSetWindowShouldClose(gwin, GLFW_TRUE);
 	}
+	// Update window and framebuffer sizes
+	{
+		int width, height;
+		glfwGetWindowSize(gwin, &width, &height);
+		win->width = width;
+		win->height = height;
+		glViewport(0, 0, width, height);
+	}
+
+	// Swap buffers
 	glfwSwapBuffers(win->gwin);
 }
+
 
 void win_clear(window* win)
 {
@@ -107,10 +121,13 @@ void win_clear(window* win)
 	glClear(GL_COLOR_BUFFER_BIT);
 }
 
-void win_pollevents(window* win)
+
+// Makes the thread sleep and resumes it on events
+void win_waitevents()
 {
-	glfwPollEvents();
+	glfwWaitEvents();
 }
+
 
 void win_setclose(window* win, int val)
 {

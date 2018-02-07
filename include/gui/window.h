@@ -16,7 +16,7 @@ void win_destroy(window* win);
 void win_settitle(window* win, const char* title);
 void win_update(window* win);
 void win_clear(window* win);
-void win_pollevents(window* win);
+void win_waitevents();
 void win_setclose(window* win, int val);
 int win_shouldclose(const window* win);
 

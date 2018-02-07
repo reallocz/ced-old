@@ -9,6 +9,7 @@ int main(void)
 	sb_pprint(&a);
 	window* win = win_create(640, 480);
 
+	double time = glfwGetTime();
 	/* Main loop */
 	while (!win_shouldclose(win))
 	{
@@ -16,9 +17,11 @@ int main(void)
 		 * Rendering
 		 * window: clear->update->pollevents cycle
 		 */
+		printf("diff = %f\n", glfwGetTime() - time);
+		time = glfwGetTime();
 		win_clear(win);
 		win_update(win);
-		win_pollevents(win);
+		win_waitevents();
 	}
 
 	win_destroy(win);
