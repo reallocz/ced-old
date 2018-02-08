@@ -108,17 +108,17 @@ const char* sb_getstr(strbuf* sb)
 void sb_destroy(strbuf* sb)
 {
 	assert(sb != NULL);
-	if(! flag_isset(sb->flags, f_init)) {
-		printf("E: %s: uninitialized strbuf.\n", __func__);
-		return;
-	}
 	if(flag_isset(sb->flags, f_dead)) {
 		printf("E: %s: double destroy.\n", __func__);
+		return;
+	}
+	if(! flag_isset(sb->flags, f_init)) {
+		printf("E: %s: uninitialized strbuf.\n", __func__);
 		return;
 	} else {
 		sb->len = 0;
 		sb->size = 0;
-		free(sb->buf);	
+		free(sb->buf);
 		sb->buf = NULL;
 		flag_unset(&sb->flags, f_init);
 		flag_set(&sb->flags, f_dead);
