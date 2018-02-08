@@ -66,6 +66,7 @@ static void _sb_copy(strbuf* dst, const strbuf* src)
 	dst->len = src->len;
 }
 
+// Initializes flags too
 strbuf sb_create(uint size)
 {
 	strbuf sb = {.flags = 0, .len = 0, .size = size, .buf = NULL};
@@ -95,6 +96,29 @@ strbuf sb_createfrom_str(const char* str)
 	strbuf sb = sb_create(srclen);
 	_sb_strncpy(sb.buf, (char*)str, srclen);
 	sb.len = srclen; // len == size
+	return sb;
+}
+
+
+strbuf sb_createfrom_file(const char* path)
+{
+	FILE* f = fopen(path, "r");
+	if(! f) {
+		printf("E: %s(path = %s): error opening file.\n", __func__, path);
+		exit(1);
+	}
+	strbuf sb;
+	size_t fsize;
+	size_t readsize;
+
+	// get filesize
+	fseek(f, 0, SEEK_END);
+	fsize = ftell(f);
+	rewind(f);
+	sb = sb_create(fsize);
+	sb.len = fsize;
+	readsize = fread(sb.buf, sizeof(char), sb.len, f);
+	printf("%s: read %zu/%zu bytes.\n", __func__, readsize, fsize);
 	return sb;
 }
 

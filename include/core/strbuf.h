@@ -16,6 +16,8 @@ strbuf sb_create(uint size);
 strbuf sb_createfrom_strbuf(strbuf* sb);
 // Create a new strbuf from a str
 strbuf sb_createfrom_str(const char* str);
+// Create a new strbuf from file
+strbuf sb_createfrom_file(const char* path);
 
 void sb_destroy(strbuf* sb);
 
