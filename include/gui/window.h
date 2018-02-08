@@ -13,7 +13,7 @@ window* win_create(uint width, uint height);
 /** window destructor */
 void win_destroy(window* win);
 
-void win_settitle(window* win, const char* title);
+void win_settitle(window* win, strbuf title);
 void win_update(window* win);
 void win_clear(window* win);
 void win_waitevents();

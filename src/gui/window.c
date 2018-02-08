@@ -35,10 +35,10 @@ static void _win_initglfw()
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 }
 
-static GLFWwindow* _win_create_glfwwindow(uint width, uint height)
+static GLFWwindow* _win_create_glfwwindow(uint width, uint height, strbuf* title)
 {
 	/* Create a windowed mode window and its OpenGL context */
-	GLFWwindow* window = glfwCreateWindow(width, height, WINDEF_TITLE,
+	GLFWwindow* window = glfwCreateWindow(width, height, sb_getstr(title),
 			NULL, NULL);
 	if (!window)
 	{
@@ -50,7 +50,7 @@ static GLFWwindow* _win_create_glfwwindow(uint width, uint height)
 	glfwMakeContextCurrent(window);
 	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
 	{
-		printf("E: %s:Failed to init glad!\n", __func__);	
+		printf("E: %s:Failed to init glad!\n", __func__);
 		exit(1);
 	}
 	return window;
@@ -64,14 +64,18 @@ window* win_create(uint width, uint height)
 	win->gwin = NULL;
 	win->width = width;
 	win->height = height;
+	win->title = sb_createfrom_str(WINDEF_TITLE);
 	win->shouldclose = 0;
 
-	win->gwin = _win_create_glfwwindow(win->width, win->height);
+	win->gwin = _win_create_glfwwindow(win->width, win->height, &win->title);
 	flag_set(&win->flags, f_init);
+	// Set window pointer
+	glfwSetWindowUserPointer(win->gwin, win);
 	return win;
 }
 
 
+// Terminates the whole program
 void win_destroy(window* win)
 {
 	assert(win != NULL);
@@ -79,17 +83,23 @@ void win_destroy(window* win)
 		printf("E: %s: Double destroy.\n", __func__);
 		return;
 	}
+	sb_destroy(&win->title);
+
+	// Glfw stuff
 	glfwDestroyWindow(win->gwin);
+	glfwTerminate();
+
+	// Set flags
 	flag_unset(&win->flags, f_init);
 	flag_set(&win->flags, f_dead);
 	win = NULL;
-	glfwTerminate();
 	printf("%s: window destoryed.\n", __func__);
 }
 
-void win_settitle(window* win, const char* title)
+void win_settitle(window* win, strbuf title)
 {
-	glfwSetWindowTitle(win->gwin, title);
+	win->title = title;
+	glfwSetWindowTitle(win->gwin, sb_getstr(&title));
 }
 
 void win_update(window* win)
