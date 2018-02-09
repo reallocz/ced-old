@@ -9,7 +9,9 @@
 // print out diagnostic info
 static int _sb_diag(strbuf* sb);
 
-
+/** Internal wrapper around malloc.
+ * NOTE: Exits on failure
+ */
 static char* _sb_malloc(uint size)
 {
 	char* data = malloc(size * sizeof(char));
@@ -22,6 +24,9 @@ static char* _sb_malloc(uint size)
 }
 
 
+/** Internal wrapper around realloc.
+ * NOTE: Exits on failure.
+ */
 static char* _sb_realloc(char* ptr, uint size)
 {
 	char* newdata = realloc(ptr, size * sizeof(char));
@@ -34,6 +39,9 @@ static char* _sb_realloc(char* ptr, uint size)
 }
 
 
+/** Internal wrapper around strncpy.
+ * NOTE: Exits on failure.
+ */
 static void _sb_strncpy(char* dst, char* src, uint srclen)
 {
 	for(uint i = 0; i < srclen; ++i) {
@@ -41,6 +49,10 @@ static void _sb_strncpy(char* dst, char* src, uint srclen)
 	}
 }
 
+
+/** Copy the src strbuf to dst.
+ * dst is resized if necessary
+ */
 static void _sb_copy(strbuf* dst, const strbuf* src)
 {
 	assert(dst != NULL);
@@ -158,7 +170,7 @@ void sb_resize(strbuf* sb, uint newsize)
 	uint oldsize = sb->size;
 	if(newsize == oldsize) {
 		return;
-	} 
+	}
 	sb->buf = _sb_realloc(sb->buf, newsize);
 	sb->size = newsize;
 }
@@ -181,7 +193,7 @@ void sb_append_str(strbuf* sb, const char* str)
 {
 	assert(sb != NULL);
 	assert(str != NULL);
-	
+
 	for(int i = 0 ; ; ++i) {
 		char c = str[i];
 		if(c == '\0')

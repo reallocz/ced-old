@@ -8,20 +8,24 @@
 #define WINDEF_TITLE "[NEW DOCUMENT]"
 
 
+/** window_t is a wrapper around the GLFWwindow with some additional data.*/
 struct window_t {
 	uint flags;
-	GLFWwindow* gwin;
-	int width;
-	int height;
-	strbuf title;
-	int shouldclose;
+	GLFWwindow* gwin;	/**< glfw window handle*/
+	int width;			/**< width of the window in px*/
+	int height;			/**< height of the window in px*/
+	strbuf title;		/**< title of the window titlebar*/
+	int shouldclose;	/**< window close flag*/ // TODO use flags instead.
 };
 
+/** Internal glfw error callback */
 static void _win_glfw_onerror(int error, const char* desc)
 {
 	printf("E: %s: code=%d: %s.\n", __func__, error, desc);
+	// TODO should abort here?
 }
 
+/** Initialize glfw and set gl hints/flags*/
 static void _win_initglfw()
 {
 	/* Initialize the library */
@@ -35,6 +39,11 @@ static void _win_initglfw()
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 }
 
+/** Create a glfw window.
+ * Note: Creating multile windows is NOT supported right now.
+ * \return glfw window handle
+ * //TODO ensure that this is called only once!
+ */
 static GLFWwindow* _win_create_glfwwindow(uint width, uint height, strbuf* title)
 {
 	/* Create a windowed mode window and its OpenGL context */
@@ -75,7 +84,6 @@ window* win_create(uint width, uint height)
 }
 
 
-// Terminates the whole program
 void win_destroy(window* win)
 {
 	assert(win != NULL);
