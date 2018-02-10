@@ -2,11 +2,11 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <assert.h>
+#include "core/input.h"
 
 #define GLV_MAJOR 3
 #define GLV_MINOR 3
 #define WINDEF_TITLE "[NEW DOCUMENT]"
-
 
 /** window_t is a wrapper around the GLFWwindow with some additional data.*/
 struct window_t {
@@ -23,6 +23,12 @@ static void _win_glfw_onerror(int error, const char* desc)
 {
 	printf("E: %s: code=%d: %s.\n", __func__, error, desc);
 	// TODO should abort here?
+}
+
+/** Internal glfw key callback */
+static void _win_glfw_keycb(GLFWwindow* gwin, int key, int scancode, int action, int mods)
+{
+	inp_onkey(glfwGetWindowUserPointer(gwin), key, action, mods);
 }
 
 /** Initialize glfw and set gl hints/flags*/
@@ -62,6 +68,8 @@ static GLFWwindow* _win_create_glfwwindow(uint width, uint height, strbuf* title
 		printf("E: %s:Failed to init glad!\n", __func__);
 		exit(1);
 	}
+	/* Set key callback */
+	glfwSetKeyCallback(window, _win_glfw_keycb);
 	return window;
 }
 
