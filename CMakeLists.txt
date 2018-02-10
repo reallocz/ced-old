@@ -15,7 +15,7 @@ include_directories(
 )
 
 # Compiler flags
-#add_compile_options(-Wall -Wextra -Wpedantic)
+add_compile_options(-Wall -Wextra -Wpedantic)
 
 # Subdirs
 add_subdirectory(${SRCDIR}/core)
@@ -24,7 +24,7 @@ add_subdirectory(${SRCDIR}/gui)
 # Executables
 add_executable(debug ${SRCDIR}/main.c)
 
-target_link_libraries(debug 
+target_link_libraries(debug
 	# Glfw dependencies
 	GL
 	m
@@ -45,4 +45,4 @@ target_link_libraries(debug
 	# placing this before gui and core causes ld error. Right now
 	# this config works. Keep this at the bottom of the list.
 	${CMAKE_SOURCE_DIR}/${LIBDIR}/libglfw3.a
-) 
+)
