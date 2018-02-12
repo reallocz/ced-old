@@ -22,7 +22,7 @@ add_subdirectory(${SRCDIR}/core)
 add_subdirectory(${SRCDIR}/gui)
 
 # Executables
-add_executable(debug ${SRCDIR}/main.c)
+add_executable(debug ${SRCDIR}/main.c ${SRCDIR}/fileutils.c)
 
 target_link_libraries(debug
 	# Glfw dependencies
