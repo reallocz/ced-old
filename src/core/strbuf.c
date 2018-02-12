@@ -7,7 +7,7 @@
 
 // Static functions
 // print out diagnostic info
-static int _sb_diag(strbuf* sb);
+static int _sb_diag(strbuf* sb) __attribute__((unused));
 
 /** Internal wrapper around malloc.
  * NOTE: Exits on failure
@@ -16,7 +16,7 @@ static char* _sb_malloc(uint size)
 {
 	char* data = malloc(size * sizeof(char));
 	if(data == NULL) {
-		printf("E: %s(size=%zd)\n", __func__, size);
+		printf("E: %s(size=%d)\n", __func__, size);
 		exit(1);
 	} else {
 		return data;
@@ -31,7 +31,7 @@ static char* _sb_realloc(char* ptr, uint size)
 {
 	char* newdata = realloc(ptr, size * sizeof(char));
 	if(newdata == NULL) {
-		printf("E: %s(ptr=%x, size=%zd)\n", __func__);
+		printf("E: %s(ptr=%p, size=%d)\n", __func__, ptr, size);
 		exit(1);
 	} else {
 		return newdata;
@@ -39,11 +39,10 @@ static char* _sb_realloc(char* ptr, uint size)
 }
 
 
-/** Internal wrapper around strncpy.
- * NOTE: Exits on failure.
- */
-static void _sb_strncpy(char* dst, char* src, uint srclen)
+/** **unsafe** Internal wrapper around strncpy.*/
+static void _sb_strncpy(char* dst, const char* src, uint srclen)
 {
+	assert(dst && src);
 	for(uint i = 0; i < srclen; ++i) {
 		dst[i] = src[i];
 	}
@@ -87,7 +86,7 @@ strbuf sb_create(uint size)
 	return sb;
 }
 
-strbuf sb_createfrom_strbuf(strbuf* sb)
+strbuf sb_createfrom_strbuf(const strbuf* sb)
 {
 	assert(sb != NULL);
 	if(! flag_isset(sb->flags, f_init)) {
@@ -135,7 +134,7 @@ strbuf sb_createfrom_file(const char* path)
 }
 
 
-const char* sb_getstr(strbuf* sb)
+const char* sb_get_cstr(strbuf* sb)
 {
 	sb->buf[sb->len] = '\0';
 	return sb->buf;
@@ -204,19 +203,96 @@ void sb_append_str(strbuf* sb, const char* str)
 }
 
 
-void sb_pprint(strbuf* sb)
+int sb_contains_char(const strbuf* sb, char c)
+{
+	return sb_count_char(sb, c) > 0;
+}
+
+
+uint sb_count_char(const strbuf* sb, char c)
+{
+	assert(sb);
+	uint count = 0;
+	for(uint i = 0; i < sb->len; ++i) {
+		if(sb->buf[i] == c) count++;
+	}
+	return count;
+}
+
+
+void sb_spliton_char(const strbuf* sb, char sep, strbuf** result, uint* count)
+{
+	assert(sb);
+	uint sepcount = sb_count_char(sb, sep);
+	if(sepcount == 0) {
+		*count = 0;
+		*result = NULL;
+		return;
+	}
+
+	strbuf* splits = malloc((sepcount + 1) * sizeof(strbuf));
+	assert(splits);
+
+	const char* srcbuf = sb->buf;	// alias
+	uint lastpos = 0;				// last poition of seperator
+	uint sc = 0;					// initialized split count
+
+	// This loop should run till i == (sb->len-1) *BUT* to handle the case of
+	// the last split, we let it run till i == sb->len and add extra checks
+	// (check #1 and #2) to prevent buffer overflows.
+	for(uint i = 0; i < sb->len + 1; ++i) {
+		if(srcbuf[i] == sep && i < sb->len) {	/* check #1*/
+			uint len = i - lastpos;
+			strbuf* dsb = &splits[sc];
+			*dsb = sb_create(len);
+			dsb->len = len;
+			_sb_strncpy(dsb->buf, &srcbuf[lastpos], len);
+			/* Update last position and init count*/
+			lastpos = i + 1;
+			sc++;
+		} else if (i == sb->len) {				/* check #2*/
+			/* Last split case */
+			uint lastlen = sb->len - lastpos;
+			strbuf* dsb = &splits[sc];
+			*dsb = sb_create(lastlen);
+			dsb->len = lastlen;
+			_sb_strncpy(dsb->buf, &srcbuf[lastpos], lastlen);
+			/* Update init count */
+			sc++;
+			break; /* This is the last split so it's safe to break out.*/
+		}
+	}
+
+	assert(sc == sepcount + 1);
+
+	// assign the results
+	*count = sepcount + 1;
+	*result = splits;
+}
+
+void sb_splitlines(const strbuf* sb, strbuf** result, uint* count)
+{
+	sb_spliton_char(sb, '\n', result, count);
+}
+
+
+/// DEBUG AND PRINTING
+
+void sb_pprint(const strbuf* sb)
 {
 	assert(sb != NULL);
 	printf("[[strbuf]] ");
-	printf(" len =%zd,", sb->len);
-	printf(" size=%zd,", sb->size);
-	printf(" &buf=%x,", (sb->buf));
-	printf(" buf=\"%s\"", sb_getstr(sb));
+	printf(" len =%d,", sb->len);
+	printf(" size=%d,", sb->size);
+	printf(" &buf=%p,", (sb->buf));
+	printf(" buf=\"");
+	sb_print_string(sb);
+	printf("\"");
 	printf("[[/strbuf]]\n");
 }
 
 
-void sb_print_string(strbuf* sb)
+void sb_print_string(const strbuf* sb)
 {
 	for(uint i = 0; i < sb->len; ++i)
 		putchar(sb->buf[i]);

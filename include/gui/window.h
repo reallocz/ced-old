@@ -4,6 +4,7 @@
 
 #include "mytypes.h"
 #include "core/strbuf.h"
+#include "core/document.h"
 
 typedef struct window_t window;
 
@@ -47,4 +48,9 @@ void win_setclose(window* win, int val);
  * \return 1 if the close flag is set.
  */
 int win_shouldclose(const window* win);
+
+/** Set the document on the window. */
+void win_setdoc(window* win, document* doc);
+
+document* win_getdoc(const window* win);
 

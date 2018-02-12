@@ -16,6 +16,8 @@ struct window_t {
 	int height;			/**< height of the window in px*/
 	strbuf title;		/**< title of the window titlebar*/
 	int shouldclose;	/**< window close flag*/ // TODO use flags instead.
+
+	document* doc;		/**< document attached to window */
 };
 
 /** Internal glfw error callback */
@@ -26,7 +28,8 @@ static void _win_glfw_onerror(int error, const char* desc)
 }
 
 /** Internal glfw key callback */
-static void _win_glfw_keycb(GLFWwindow* gwin, int key, int scancode, int action, int mods)
+static void _win_glfw_keycb(GLFWwindow* gwin, int key,
+		__attribute__((unused)) int scancode, int action, int mods)
 {
 	inp_onkey(glfwGetWindowUserPointer(gwin), key, action, mods);
 }
@@ -53,7 +56,7 @@ static void _win_initglfw()
 static GLFWwindow* _win_create_glfwwindow(uint width, uint height, strbuf* title)
 {
 	/* Create a windowed mode window and its OpenGL context */
-	GLFWwindow* window = glfwCreateWindow(width, height, sb_getstr(title),
+	GLFWwindow* window = glfwCreateWindow(width, height, sb_get_cstr(title),
 			NULL, NULL);
 	if (!window)
 	{
@@ -83,6 +86,7 @@ window* win_create(uint width, uint height)
 	win->height = height;
 	win->title = sb_createfrom_str(WINDEF_TITLE);
 	win->shouldclose = 0;
+	win->doc = NULL;
 
 	win->gwin = _win_create_glfwwindow(win->width, win->height, &win->title);
 	flag_set(&win->flags, f_init);
@@ -115,7 +119,7 @@ void win_destroy(window* win)
 void win_settitle(window* win, strbuf title)
 {
 	win->title = title;
-	glfwSetWindowTitle(win->gwin, sb_getstr(&title));
+	glfwSetWindowTitle(win->gwin, sb_get_cstr(&title));
 }
 
 void win_update(window* win)
@@ -141,7 +145,7 @@ void win_update(window* win)
 }
 
 
-void win_clear(window* win)
+void win_clear(__attribute__((unused)) window* win)
 {
 	glClearColor(255, 255, 255, 255);
 	glClear(GL_COLOR_BUFFER_BIT);
@@ -157,11 +161,24 @@ void win_waitevents()
 
 void win_setclose(window* win, int val)
 {
-	win->shouldclose = 1;
+	win->shouldclose = val;
 }
 
 int win_shouldclose(const window* win)
 {
 	return win->shouldclose || glfwWindowShouldClose(win->gwin);
+}
+
+void win_setdoc(window* win, document* doc)
+{
+	assert(win && doc);
+	win->doc = doc;
+}
+
+inline
+document* win_getdoc(const window* win)
+{
+	assert(win);
+	return win->doc;
 }
 

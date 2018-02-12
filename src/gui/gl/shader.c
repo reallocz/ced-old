@@ -53,7 +53,7 @@ static void _shader_compile(int id, const char* path)
 		sb_destroy(&sb);
 		return;
 	} else {
-		const char* data = sb_getstr(&sb);
+		const char* data = sb_get_cstr(&sb);
 		glShaderSource(id, 1, &data, NULL);
 		glCompileShader(id);
 	}

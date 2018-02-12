@@ -21,7 +21,7 @@ strbuf sb_create(uint size);
 /** Create a new strbuf from an existing one.
  * \param sb valid strbuf to be copied.
  */
-strbuf sb_createfrom_strbuf(strbuf* sb);
+strbuf sb_createfrom_strbuf(const strbuf* sb);
 
 /** Create a new strbuf from a c-string.
  * The created buffer will be of the exact size of the str
@@ -42,7 +42,7 @@ void sb_destroy(strbuf* sb);
 void sb_resize(strbuf* sb, uint newsize);
 
 /** Get the c-string from the buffer.*/
-const char* sb_getstr(strbuf* sb);
+const char* sb_get_cstr(strbuf* sb);
 
 /** Append a char at the end of the buffer.
  * Resizes buffer if necessary.
@@ -54,10 +54,30 @@ void sb_append_char(strbuf* sb, char c);
  */
 void sb_append_str(strbuf* sb, const char* str);
 
+/** Return 1 if strbuf contains char */
+int sb_contains_char(const strbuf* sb, char c);
+
+/** Count the number of times a char occurs in strbuf */
+uint sb_count_char(const strbuf* sb, char c);
+
+/** Split the strbuf on 'sep' delimiter.
+ * \param sb strbuf to be split
+ * \param sep delimiter
+ * \param result pointer to split strbufs. NULL if count == 0
+ * \param count number of split strbufs
+ */
+void sb_spliton_char(const strbuf* sb, char sep, strbuf** result, uint* count);
+
+
+/** Split the strbuf delimited by '\n'.
+ * Equivalent to sb_spliton_char(sb, result, count ,'\n'); */
+void sb_splitlines(const strbuf* sb, strbuf** result, uint* count);
+
+//// PRINTING AND DEBUG
 // TODO add mode param for different kinds of pprint
 /** Pretty print the buffer. */
-void sb_pprint(strbuf* sb);
+void sb_pprint(const strbuf* sb);
 
 /** Print out the buffer string.*/
-void sb_print_string(strbuf* sb);
+void sb_print_string(const strbuf* sb);
 
