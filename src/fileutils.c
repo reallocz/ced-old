@@ -3,11 +3,12 @@
 #include <assert.h>
 #include <stdio.h>
 
+// TODO return NULL on failure
 char* file_readfile(const char* path) {
 	FILE* file = fopen(path, "r");
 	if(! file) {
 		printf("E: %s(path = %s): error opening file.\n", __func__, path);
-		exit(1);
+		return NULL;
 	}
 	size_t fsize;
 	size_t readsize;

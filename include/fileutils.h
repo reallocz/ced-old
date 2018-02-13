@@ -1,7 +1,7 @@
 #pragma once
 
 /** Loads a file in the memory.
- * NOTE: You have to free the memory manually!
+ * \return buffer on success. NULL on failure.
  */
 char* file_readfile(const char* path);
 
