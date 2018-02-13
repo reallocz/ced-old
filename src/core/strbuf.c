@@ -134,10 +134,17 @@ strbuf sb_createfrom_file(const char* path)
 }
 
 
-const char* sb_get_cstr(strbuf* sb)
+char* sb_create_cstr(const strbuf* sb)
 {
-	sb->buf[sb->len] = '\0';
-	return sb->buf;
+	char* buf = _sb_malloc(sb->len + 1);
+	_sb_strncpy(buf, sb->buf, sb->len);
+	buf[sb->len] = '\0';
+	return buf;
+}
+
+void sb_destroy_cstr(char* buf)
+{
+	free(buf);
 }
 
 void sb_destroy(strbuf* sb)

@@ -41,8 +41,15 @@ void sb_destroy(strbuf* sb);
  */
 void sb_resize(strbuf* sb, uint newsize);
 
-/** Get the c-string from the buffer.*/
-const char* sb_get_cstr(strbuf* sb);
+/** Returns a COPY of the buffer as a c-string.
+ * NOTE: You have to free the buffer.
+ */
+char* sb_create_cstr(const strbuf* sb);
+
+/** Free the buf created by sb_create_cstr.
+ * This is just a wrapper around free.
+ */
+void sb_destroy_cstr(char* buf);
 
 /** Append a char at the end of the buffer.
  * Resizes buffer if necessary.
