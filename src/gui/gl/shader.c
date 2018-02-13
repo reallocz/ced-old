@@ -1,9 +1,10 @@
 #include "glad/glad.h"
 #include "gui/gl/shader.h"
-#include "core/strbuf.h"
 #include "flags.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include "fileutils.h"
+#include <assert.h>
 
 static int _shader_compilesuccess(int id, const char* name)
 {
@@ -47,17 +48,11 @@ static int _shader_create(GLuint type)
 
 static void _shader_compile(int id, const char* path)
 {
-	strbuf sb = sb_createfrom_file(path);
-	if(sb.len == 0) {
-		printf("E: %s(id=%d, path=%s): sb.len is 0.\n", __func__, id, path);
-		sb_destroy(&sb);
-		return;
-	} else {
-		const char* data = sb_get_cstr(&sb);
-		glShaderSource(id, 1, &data, NULL);
-		glCompileShader(id);
-	}
-	sb_destroy(&sb);
+	const char* data = file_readfile(path);
+	assert(data);
+	glShaderSource(id, 1, &data, NULL);
+	glCompileShader(id);
+	file_free((char*)data);
 }
 
 shader shader_create(const char* vpath, const char* fpath)
