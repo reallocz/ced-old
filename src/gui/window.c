@@ -56,8 +56,9 @@ static void _win_initglfw()
 static GLFWwindow* _win_create_glfwwindow(uint width, uint height, strbuf* title)
 {
 	/* Create a windowed mode window and its OpenGL context */
-	GLFWwindow* window = glfwCreateWindow(width, height, sb_get_cstr(title),
-			NULL, NULL);
+	char* titlec = sb_create_cstr(title);
+	GLFWwindow* window = glfwCreateWindow(width, height, titlec, NULL, NULL);
+	sb_destroy_cstr(titlec);
 	if (!window)
 	{
 		printf("E: %s: Failed to create glfw window.\n", __func__);
@@ -119,7 +120,9 @@ void win_destroy(window* win)
 void win_settitle(window* win, strbuf title)
 {
 	win->title = title;
-	glfwSetWindowTitle(win->gwin, sb_get_cstr(&title));
+	char* titlec = sb_create_cstr(&title);
+	glfwSetWindowTitle(win->gwin, titlec);
+	sb_destroy_cstr(titlec);
 }
 
 void win_update(window* win)
