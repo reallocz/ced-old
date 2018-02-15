@@ -33,7 +33,7 @@ void ln_destroy(line* ln)
 
 void ln_pprint(line* ln)
 {
-	assert(ln != NULL);
+	assert(ln);
 	printf("[[line]]\n");
 	printf(" num =%d\n", ln->num);
 	sb_pprint(&ln->sb);

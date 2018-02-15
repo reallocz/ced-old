@@ -4,18 +4,12 @@
 #include <assert.h>
 
 
-void _inp_quit(window* win, int val)
-{
-	win_setclose(win, val);
-}
-
+/** Get the type of command from the key */
 enum doccmd_type _inp_gettype(inpkey ik)
 {
 	int key = ik.key; // alias
 
-	if(key == GLFW_KEY_ESCAPE) {
-		return QUIT;
-	} else if (key >= GLFW_KEY_A && key <= GLFW_KEY_Z) {
+	if (key >= GLFW_KEY_A && key <= GLFW_KEY_Z) {
 		return INSERT;
 	} else {
 		return NOP;
@@ -26,19 +20,27 @@ enum doccmd_type _inp_gettype(inpkey ik)
 void inp_onkey(window* win, inpkey ik)
 {
 	/* ignore key releases for now */
+	if(!win_getdoc(win)) {
+		printf("No document set!\n");
+		return;
+	}
 	if(ik.action == GLFW_RELEASE)
 		return;
 
+	if(ik.key == GLFW_KEY_ESCAPE) {
+		win_setclose(win, 1);
+		return;
+	}
+
 	enum doccmd_type type = _inp_gettype(ik);
 	document* doc = win_getdoc(win);
-	doccmd cmd;
+	doccmd cmd = dc_create(type);
+
+	/* Dispatch to doc_exec */
 	switch (type) {
 		case (INSERT):
-			cmd = dc_create(INSERT);
+			cmd.data.c = ik.key;
 			doc_exec(doc, cmd);
-			break;
-		case (QUIT):
-			_inp_quit(win, 1);
 			break;
 		default:
 			break;

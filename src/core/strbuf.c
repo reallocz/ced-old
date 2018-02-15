@@ -149,7 +149,7 @@ void sb_destroy_cstr(char* buf)
 
 void sb_destroy(strbuf* sb)
 {
-	assert(sb != NULL);
+	assert(sb);
 	if(flag_isset(sb->flags, f_dead)) {
 		printf("E: %s: double destroy.\n", __func__);
 		return;
@@ -172,7 +172,7 @@ void sb_destroy(strbuf* sb)
 
 void sb_resize(strbuf* sb, uint newsize)
 {
-	assert(sb != NULL);
+	assert(sb);
 	uint oldsize = sb->size;
 	if(newsize == oldsize) {
 		return;
@@ -185,7 +185,7 @@ void sb_resize(strbuf* sb, uint newsize)
 
 void sb_append_char(strbuf* sb, char c)
 {
-	assert(sb != NULL);
+	assert(sb);
 	if(sb->len == sb->size) {
 		printf("Resizing %d -> %d\n", sb->size, sb->size * 2);
 		sb_resize(sb, sb->size * 2);
@@ -197,8 +197,7 @@ void sb_append_char(strbuf* sb, char c)
 
 void sb_append_str(strbuf* sb, const char* str)
 {
-	assert(sb != NULL);
-	assert(str != NULL);
+	assert(sb && str);
 
 	for(int i = 0 ; ; ++i) {
 		char c = str[i];
@@ -237,6 +236,7 @@ void sb_spliton_char(const strbuf* sb, char sep, strbuf** result, uint* count)
 		return;
 	}
 
+	// number of splits required = sepcount + 1
 	strbuf* splits = malloc((sepcount + 1) * sizeof(strbuf));
 	assert(splits);
 
@@ -287,7 +287,7 @@ void sb_splitlines(const strbuf* sb, strbuf** result, uint* count)
 
 void sb_pprint(const strbuf* sb)
 {
-	assert(sb != NULL);
+	assert(sb);
 	printf("[[strbuf]] ");
 	printf(" len =%d,", sb->len);
 	printf(" size=%d,", sb->size);
