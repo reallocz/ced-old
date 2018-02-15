@@ -6,7 +6,6 @@ enum doccmd_type {
 	MOVE,
 	EDIT,
 	SAVE,
-	QUIT,
 	NOP
 };
 
@@ -21,7 +20,7 @@ union doccmd_cmd {
 typedef struct doccmd {
 	uint flags;
 	enum doccmd_type type;
-	union doccmd_cmd cmd;
+	union doccmd_cmd data;
 } doccmd;
 
 /** Init a doccmd. */
