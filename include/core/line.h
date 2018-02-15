@@ -11,5 +11,8 @@ typedef struct line {
 
 
 line ln_create();
+
+void ln_destroy();
+
 void ln_pprint(line* ln);
 

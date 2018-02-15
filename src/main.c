@@ -2,28 +2,34 @@
 #include <stdio.h>
 #include "core/strbuf.h"
 #include "core/line.h"
+#include "gui/gl/shader.h"
+#include "config.h"
+#include "fileutils.h"
+
 
 int main(void)
 {
-	strbuf a = sb_createfrom_str("Hello, World!");
-	sb_pprint(&a);
-	window* win = win_create(640, 480);
+	document d = doc_createfrom_file(sb_createfrom_str("../tmp/file"));
+	doc_pprint(&d);
 
-	double time = glfwGetTime();
+#if 1
+	/*shader_use(&sh);*/
+	window* win = win_create(640, 480);
+	shader sh = shader_create(CONF_RES_ROOT "/shaders/vert.s", CONF_RES_ROOT "/shaders/frag.s");
+
 	/* Main loop */
 	while (!win_shouldclose(win))
 	{
-		/** 
+		/**
 		 * Rendering
 		 * window: clear->update->pollevents cycle
 		 */
-		printf("diff = %f\n", glfwGetTime() - time);
-		time = glfwGetTime();
 		win_clear(win);
 		win_update(win);
 		win_waitevents();
 	}
 
 	win_destroy(win);
+#endif
 	return 0;
 }
