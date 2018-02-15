@@ -10,12 +10,12 @@
 int main(void)
 {
 	document d = doc_createfrom_file(sb_createfrom_str("../tmp/file"));
-	doc_pprint(&d);
 
-#if 1
-	/*shader_use(&sh);*/
 	window* win = win_create(640, 480);
-	shader sh = shader_create(CONF_RES_ROOT "/shaders/vert.s", CONF_RES_ROOT "/shaders/frag.s");
+	win_setdoc(win, &d);
+
+	/*shader sh = shader_create(CONF_RES_ROOT "/shaders/vert.s", CONF_RES_ROOT "/shaders/frag.s");*/
+	/*shader_use(&sh);*/
 
 	/* Main loop */
 	while (!win_shouldclose(win))
@@ -30,6 +30,5 @@ int main(void)
 	}
 
 	win_destroy(win);
-#endif
 	return 0;
 }

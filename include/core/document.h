@@ -3,11 +3,18 @@
 #include "core/strbuf.h"
 #include "core/doccmd.h"
 
+struct cursor {
+	uint flags;
+	uint row;		/**< Line number on visible screen buffer */
+	uint col;
+};
+
 typedef struct document {
 	uint flags;
 	strbuf path;	/**< Absolute path of the document. Empty for a new doc */
 	uint numlines;
 	line* lines;	/**< document consists of lines */
+	struct cursor cursor;
 } document;
 
 
