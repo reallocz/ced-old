@@ -18,7 +18,7 @@ include_directories(
 add_compile_options(-Wall -Wextra -Wpedantic)
 
 # Subdirs
-add_subdirectory(${SRCDIR}/core)
+add_subdirectory(${SRCDIR})
 add_subdirectory(${SRCDIR}/gui)
 
 # Executables

@@ -1,4 +1,4 @@
-#include "core/strbuf.h"
+#include "ds/strbuf.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <assert.h>

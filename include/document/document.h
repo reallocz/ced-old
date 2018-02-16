@@ -1,7 +1,7 @@
 #pragma once
-#include "core/line.h"
-#include "core/strbuf.h"
-#include "core/doccmd.h"
+#include "ds/strbuf.h"
+#include "document/line.h"
+#include "document/doccmd.h"
 
 struct cursor {
 	uint flags;

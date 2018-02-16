@@ -1,6 +1,6 @@
 #pragma once
 #include "mytypes.h"
-#include "core/strbuf.h"
+#include "ds/strbuf.h"
 
 typedef struct line {
 	uint flags;

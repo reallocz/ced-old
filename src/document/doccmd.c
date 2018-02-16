@@ -1,4 +1,4 @@
-#include "core/doccmd.h"
+#include "document/doccmd.h"
 
 doccmd dc_create(enum doccmd_type type)
 {

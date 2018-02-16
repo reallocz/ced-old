@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <assert.h>
-#include "core/input.h"
+#include "input/input.h"
 
 #define GLV_MAJOR 3
 #define GLV_MINOR 3

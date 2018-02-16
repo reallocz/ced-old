@@ -1,5 +1,5 @@
-#include "core/input.h"
-#include "core/doccmd.h"
+#include "input/input.h"
+#include "document/doccmd.h"
 #include <stdio.h>
 #include <assert.h>
 

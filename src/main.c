@@ -1,7 +1,7 @@
 #include "gui/window.h"
 #include <stdio.h>
-#include "core/strbuf.h"
-#include "core/line.h"
+#include "ds/strbuf.h"
+#include "document/line.h"
 #include "gui/gl/shader.h"
 #include "config.h"
 #include "fileutils.h"

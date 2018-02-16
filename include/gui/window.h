@@ -3,8 +3,8 @@
 #include <GLFW/glfw3.h>
 
 #include "mytypes.h"
-#include "core/strbuf.h"
-#include "core/document.h"
+#include "ds/strbuf.h"
+#include "document/document.h"
 
 typedef struct window_t window;
 

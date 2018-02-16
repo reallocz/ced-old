@@ -1,10 +1,10 @@
-#include "core/document.h"
+#include "document/document.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
 #include "flags.h"
 #include "mymaths.h"
-#include "core/strbuf.h"
+#include "ds/strbuf.h"
 
 // Default number of lines
 #define DOCDEF_NUMLINES 2
