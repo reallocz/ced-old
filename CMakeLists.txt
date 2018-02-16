@@ -12,6 +12,9 @@ set(INCLUDEDIRS "include")
 include_directories(
 	${INCLUDEDIRS}
 	${LIBDIR}/include
+
+	# freetype ($ pkg-config --cflags freetype2)
+	/usr/include/freetype2
 )
 
 # Compiler flags
@@ -39,6 +42,10 @@ target_link_libraries(debug
 	Xcursor
 	# / Glfw deps
 
+	# freetype
+	freetype
+
+	# Our "libs"
 	gui
 	core
 

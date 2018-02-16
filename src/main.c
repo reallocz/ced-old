@@ -5,10 +5,14 @@
 #include "gui/gl/shader.h"
 #include "config.h"
 #include "fileutils.h"
+#include <ft2build.h>
+#include FT_FREETYPE_H
 
 
 int main(void)
 {
+	FT_Library library;
+	FT_Init_FreeType(&library);
 	document d = doc_createfrom_file(sb_createfrom_str("../tmp/file"));
 
 	window* win = win_create(640, 480);
