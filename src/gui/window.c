@@ -31,8 +31,7 @@ static void _win_glfw_onerror(int error, const char* desc)
 static void _win_glfw_keycb(GLFWwindow* gwin, int key,
 		__attribute__((unused)) int scancode, int action, int mods)
 {
-	inpkey ik = {.key = key, .action = action, .mods = mods};
-	inp_onkey(glfwGetWindowUserPointer(gwin), ik);
+	inp_onkey(glfwGetWindowUserPointer(gwin), key, action, mods);
 }
 
 /** Initialize glfw and set gl hints/flags*/

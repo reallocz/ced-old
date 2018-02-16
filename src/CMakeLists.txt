@@ -10,5 +10,6 @@ add_library( core
 
 	# Input
 	input/input.c
+	input/keyboard.c
 )
 

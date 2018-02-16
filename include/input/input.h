@@ -1,12 +1,12 @@
 #pragma once
 #include "gui/window.h"
+#include "input/keyboard.h"
 
-typedef struct inpkey {
-	int key;
-	int action;
-	int mods;
-} inpkey;
+/** Primary window key event callback. */
+void inp_onkey(window* win, int key, int action, int mods);
 
-/** Primary window key callback.*/
-void inp_onkey(window* win, inpkey key);
+// TODO
+void inp_onmouse_movement(window* win);
+void inp_onmouse_button(window* win);
 
+// TODO sys signal handling
