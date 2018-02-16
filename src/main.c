@@ -5,14 +5,13 @@
 #include "gui/gl/shader.h"
 #include "config.h"
 #include "fileutils.h"
-#include <ft2build.h>
-#include FT_FREETYPE_H
+#include "gui/font.h"
 
 
 int main(void)
 {
-	FT_Library library;
-	FT_Init_FreeType(&library);
+	font_initmodule();
+	font* f = font_load(CONF_FONT_ROOT "/mono.ttf");
 	document d = doc_createfrom_file(sb_createfrom_str("../tmp/file"));
 
 	window* win = win_create(640, 480);

@@ -7,6 +7,7 @@ add_library( gui
 	gl/shader.c
 
 	window.c
+	font.c
 )
 
 # Ignore flags for external deps
