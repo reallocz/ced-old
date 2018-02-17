@@ -18,13 +18,24 @@ int init(void)
 	return 0;
 }
 
+/* run once and and exit */
+void test()
+{
+	font* f = font_load(CONF_FONT_ROOT "/mono.ttf");
+	const glyph* res = font_glyph_get(f, 'b');
+	font_glyph_pprint(res);
+	exit(0);
+}
 
 int main(void)
 {
+
 	if(init() != 0) {
 		printf("E: %s: failed to init one of the modules\n", __func__);
 		exit(1);
 	}
+
+	test(); // FIXME
 
 	font* f = font_load(CONF_FONT_ROOT "/mono.ttf");
 	document d = doc_createfrom_file(sb_createfrom_str("../tmp/file"));
