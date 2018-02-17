@@ -20,24 +20,24 @@ struct font_t {
 };
 
 /* Init only once */
-static FT_Library g_ftlib = NULL;
+static FT_Library FTLIB = NULL;
 
 /** Initialize freetype2.
  * Freetype2 must be initialized before using any of the font_ functions.
  */
 static int _font_initfreetype()
 {
-	if(g_ftlib) {
+	if(FTLIB) {
 		printf("E: %s: double init!\n", __func__);
 		return 1;
 	}
 	int error = 0;
-	error = FT_Init_FreeType(&g_ftlib);
+	error = FT_Init_FreeType(&FTLIB);
 	if(error) {
 		printf("E: %s: failed to init freetype!\n", __func__);
 		return 1;
 	}
-	assert(g_ftlib);
+	assert(FTLIB);
 	return 0;
 }
 
@@ -49,7 +49,7 @@ int font_initmodule()
 /** Exit if freetype's not init */
 static void _check_init()
 {
-	if(! g_ftlib) {
+	if(! FTLIB) {
 		printf("E: %s: freetype is not initialized!\n", __func__);
 		exit(1);
 	}
@@ -63,20 +63,6 @@ static void _init_font(font* f)
 	f->resolution = 0;
 }
 
-int font_set_size(font* font, uint size)
-{
-	int error = 0;
-	error = FT_Set_Char_Size(font->ft_face,
-			0, size * 64,	// width same as height(=size*64)
-			0, FNTDEF_RES);	// horiz resolution same as vert(=FNTDEF_RES)
-
-	if(error) {
-		printf("E: %s(size=%d): error!\n", __func__, size);
-		exit(1);
-	}
-	return 0;
-}
-
 font* font_load(const char* path)
 {
 	_check_init();
@@ -85,7 +71,7 @@ font* font_load(const char* path)
 
 	// Load font
 	int error = 0;
-	error = FT_New_Face(g_ftlib, path, 0, &f->ft_face);
+	error = FT_New_Face(FTLIB, path, 0, &f->ft_face);
 	if(error == FT_Err_Unknown_File_Format) {
 		printf("E: %s: failed to load font face: UNKNOWN FORMAT\
 			   	'%s'\n", __func__, path);
@@ -109,6 +95,21 @@ void font_destroy(font* f)
 	// TODO
 	free(f);
 	f = NULL;
+}
+
+
+int font_set_size(font* font, uint size)
+{
+	int error = 0;
+	error = FT_Set_Char_Size(font->ft_face,
+			0, size * 64,	// width same as height(=size*64)
+			0, FNTDEF_RES);	// horiz resolution same as vert(=FNTDEF_RES)
+
+	if(error) {
+		printf("E: %s(size=%d): error!\n", __func__, size);
+		exit(1);
+	}
+	return 0;
 }
 
 
