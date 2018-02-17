@@ -5,7 +5,7 @@
 #include "gui/gl/shader.h"
 #include "config.h"
 #include "fileutils.h"
-#include "gui/font.h"
+#include "font/font.h"
 
 
 int main(void)

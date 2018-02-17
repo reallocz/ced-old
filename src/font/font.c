@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include <assert.h>
 
-#include "gui/font.h"
+#include "font/font.h"
 #include "mytypes.h"
 #include "flags.h"
 
