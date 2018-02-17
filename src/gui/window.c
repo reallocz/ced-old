@@ -35,17 +35,18 @@ static void _win_glfw_keycb(GLFWwindow* gwin, int key,
 }
 
 /** Initialize glfw and set gl hints/flags*/
-static void _win_initglfw()
+static int _win_initglfw()
 {
 	/* Initialize the library */
 	if(! glfwInit()) {
 		printf("E: %s: Failed to init GLFW.\n", __func__);
-		exit(1);
+		return 1;
 	}
 	glfwSetErrorCallback(_win_glfw_onerror);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, GLV_MAJOR);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, GLV_MINOR);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+	return 0;
 }
 
 /** Create a glfw window.
@@ -77,9 +78,13 @@ static GLFWwindow* _win_create_glfwwindow(uint width, uint height, strbuf* title
 	return window;
 }
 
+int win_initmodule()
+{
+	return _win_initglfw();
+}
+
 window* win_create(uint width, uint height)
 {
-	_win_initglfw();
 	window* win = malloc(sizeof(window));
 	win->flags = 0;
 	win->gwin = NULL;

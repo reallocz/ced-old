@@ -25,24 +25,25 @@ static FT_Library g_ftlib = NULL;
 /** Initialize freetype2.
  * Freetype2 must be initialized before using any of the font_ functions.
  */
-static void _font_initfreetype()
+static int _font_initfreetype()
 {
 	if(g_ftlib) {
 		printf("E: %s: double init!\n", __func__);
-		exit(1); // TODO return rather than exit
+		return 1;
 	}
 	int error = 0;
 	error = FT_Init_FreeType(&g_ftlib);
 	if(error) {
 		printf("E: %s: failed to init freetype!\n", __func__);
-		exit(1);
+		return 1;
 	}
 	assert(g_ftlib);
+	return 0;
 }
 
-void font_initmodule()
+int font_initmodule()
 {
-	_font_initfreetype();
+	return _font_initfreetype();
 }
 
 /** Exit if freetype's not init */

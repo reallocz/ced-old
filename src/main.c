@@ -1,5 +1,6 @@
 #include "gui/window.h"
 #include <stdio.h>
+#include <stdlib.h>
 #include "ds/strbuf.h"
 #include "document/line.h"
 #include "gui/gl/shader.h"
@@ -7,10 +8,24 @@
 #include "fileutils.h"
 #include "font/font.h"
 
+int init(void)
+{
+	int err = 0;
+	err = win_initmodule();
+	if(err) return err;
+	err = font_initmodule();
+	if(err) return err;
+	return 0;
+}
+
 
 int main(void)
 {
-	font_initmodule();
+	if(init() != 0) {
+		printf("E: %s: failed to init one of the modules\n", __func__);
+		exit(1);
+	}
+
 	font* f = font_load(CONF_FONT_ROOT "/mono.ttf");
 	document d = doc_createfrom_file(sb_createfrom_str("../tmp/file"));
 

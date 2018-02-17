@@ -8,8 +8,13 @@
 
 typedef struct window_t window;
 
+/** Initializes glfw, creates gl context, and init's glad.
+ * \return 0 on success
+ */
+int win_initmodule();
+
+
 /** Standard window constructor.
- * Initializes glfw, creates gl context, and init's glad.
  * \param width width in px
  * \param height height in px
  * \return handle to the window

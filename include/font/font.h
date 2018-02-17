@@ -4,7 +4,7 @@
 typedef struct font_t font;
 
 /** initialize font submodule for use */
-void font_initmodule();
+int font_initmodule();
 
 /** Load up the font */
 font* font_load(const char* path);
