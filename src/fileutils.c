@@ -20,8 +20,9 @@ char* file_readfile(const char* path) {
 	rewind(file);
 
 	// Malloc and read to buffer
-	buf = malloc(fsize * sizeof(char));
+	buf = malloc((fsize + 1) * sizeof(char));
 	readsize = fread(buf, sizeof(char), fsize, file);
+	buf[fsize] = '\0';
 	printf("%s: read %zu/%zu bytes.\n", __func__, readsize, fsize);
 	return buf;
 }
