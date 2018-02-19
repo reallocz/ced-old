@@ -7,6 +7,7 @@
 #include "config.h"
 #include "fileutils.h"
 #include "font/font.h"
+#include "rendering/renderer.h"
 
 int init(void)
 {
@@ -14,6 +15,8 @@ int init(void)
 	err = win_initmodule();
 	if(err) return err;
 	err = font_initmodule();
+	if(err) return err;
+	err = rdr_initmodule();
 	if(err) return err;
 	return 0;
 }
@@ -66,9 +69,12 @@ int main(void)
 		win_clear(win);
 
 		// Draw start
-		glUseProgram(sh.id);
-		/*shader_use(&sh);*/
+		for(uint i = 0; i < d.numlines; ++i) {
+			rdr_render_line(&d.lines[i]);
+		}
+		shader_use(&sh);
 		glDrawArrays(GL_TRIANGLES, 0, 3);
+
 		// Draw end
 
 		win_update(win);

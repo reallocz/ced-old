@@ -14,5 +14,9 @@ add_library( core
 	# Input
 	input/input.c
 	input/keyboard.c
+
+	# Rendering
+	rendering/renderer.c
+	rendering/line_renderer.c
 )
 
