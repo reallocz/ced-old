@@ -168,20 +168,7 @@ static void _font_loadglyphs(font* f)
 			};
 
 			_font_glyph_add(f, &g);
-			for(uint row = 0; row < bitmap.rows; ++row) {
-				printf("\t");
-				for(uint col = 0; col < bitmap.width; ++col) {
-					char c;
-					int d = bitmap.buffer[row*bitmap.width + col];
-					if( d > 200 ) c = '#';
-					else if (d > 40) c = 'o';
-					else c = ' ';
-
-					printf("%c", c);
-				}
-				printf("\n");
-			}
-			printf("\n\n");
+			/*font_printarb(bitmap.buffer, bitmap.width, bitmap.rows);*/
 			/*printf("D: found:  %d -> %c\n", gindex, (char)i);*/
 			count++;
 		}
@@ -268,5 +255,22 @@ void font_glyph_pprint(const glyph* g)
 	printf("bitmap_left: %d, ", g->bitmap_left);
 	printf("bitmap_top: %d, ", g->bitmap_top);
 	printf("[[/Glyph]]\n");
+}
+
+void font_printarb(unsigned char* buffer, uint width, uint rows)
+{
+	for(uint row = 0; row < rows; ++row) {
+		printf("\t");
+		for(uint col = 0; col < width; ++col) {
+			char c;
+			int d = buffer[row*width + col];
+			if( d > 200 ) c = '#';
+			else if (d > 40) c = 'o';
+			else c = ' ';
+
+			printf("%c", c);
+		}
+		printf("\n");
+	}
 }
 

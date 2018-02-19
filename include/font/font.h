@@ -32,4 +32,6 @@ const glyph* font_glyph_get(const font* fnt, char ch);
 // pprint and debug
 void font_pprint(const font* fnt);
 void font_glyph_pprint(const glyph* g);
+/** Print glyph to the console */
+void font_printarb(unsigned char* buffer, uint width, uint rows);
 
